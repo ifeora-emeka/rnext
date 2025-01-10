@@ -1,16 +1,19 @@
 {
   "name": "rnext",
-  "type": "module",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "examples/*"
-  ],
-  "devDependencies": {
-    "@types/bun": "latest"
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "^2.3.3",
+    "typescript": "5.5.4"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
   }
 }
