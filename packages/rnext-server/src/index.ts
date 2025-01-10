@@ -22,6 +22,7 @@ export class RNextServer {
     constructor(options: RNextServerOptions) {
         this.app = options?.app;
         this.server = express();
+        this.initializeMiddleware();
 
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
@@ -36,6 +37,11 @@ export class RNextServer {
         } catch (error) {
             console.error('Error checking cms-build directory:', error);
         }
+    }
+
+    private initializeMiddleware = async () => {
+        this.server.use(express.json());
+        this.server.use(express.urlencoded({ extended: true }));
     }
 
     public listen = async (port: number, callback?: () => void): Promise<void> => {
@@ -123,3 +129,6 @@ export class RNextServer {
         }
     };
 }
+
+const server = new RNextServer({});
+server.listen(3000);

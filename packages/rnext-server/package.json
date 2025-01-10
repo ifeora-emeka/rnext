@@ -17,34 +17,34 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node && cd ../../apps/cms && bun run build && cp -r dist ../../packages/rnext-server/dist/cms-build",
-    "dev": "bun --watch src/index.ts",
+    "build": "tsc ./src/index.ts --outdir ./dist --target node && cd ../../apps/cms && npm run build && cp -r dist ../../packages/rnext-server/dist/cms-build",
+    "dev": "bun src/index.ts",
     "clean": "rm -rf dist",
-    "prepublishOnly": "bun run clean && bun run build && npm version patch",
+    "prepublishOnly": "npm run clean && npm run build && npm version patch",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "next": "^13.0.0 || ^14.0.0 || ^15.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "next": "^13.0.0 || ^14.0.0 || ^15.0.0"
   },
   "devDependencies": {
-    "@types/bun": "latest",
     "@types/express": "^5.0.0",
     "@types/node": "^20.0.0",
-    "next": "^15.1.4",
+    "concurrently": "^9.1.2",
     "express": "^4.21.2",
-    "typescript": "^5.0.0"
+    "next": "^15.1.4",
+    "nodemon": "^3.1.9",
+    "typescript": "^5.0.0",
+    "wait-on": "^8.0.2"
   },
   "engines": {
-    "bun": ">=1.0.0",
     "node": ">=18.0.0"
   },
   "keywords": [
     "next.js",
     "vite",
     "server",
-    "express",
-    "bun"
+    "express"
   ],
   "author": "Ifeora Emeka",
   "license": "MIT",
