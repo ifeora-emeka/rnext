@@ -55,5 +55,8 @@
   "bugs": {
     "url": "https://github.com/idegin-tech/rnext/rnext-server/issues"
   },
-  "homepage": "https://github.com/idegin-tech/renext/rnext-server#readme"
+  "homepage": "https://github.com/idegin-tech/renext/rnext-server#readme",
+  "dependencies": {
+    "zod": "^3.24.1"
+  }
 }

@@ -4,45 +4,65 @@ import fs from "fs";
 import path from "path";
 import type {rNextSchemaDef} from "../../types/schema.types.ts";
 import {convertSchemaToTypeORM} from "../../utils/converters.ts";
+import type {QueryRunner} from "typeorm";
 
 export default class SchemaController {
 
     public createSchema = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {tableName, fields}: rNextSchemaDef = req.body;
+            const { tableName, fields }: rNextSchemaDef = req.body;
 
             if (!tableName || !fields || !Array.isArray(fields)) {
-                return res.status(400).json({error: "Table name and an array of fields are required"});
+                return res.status(400).json({ error: "Table name and an array of fields are required" });
             }
 
-            const typeORMSchema = convertSchemaToTypeORM({tableName, fields} as any);
+            fields.unshift(
+                {
+                    //@ts-ignore
+                    def: { label: "ID", slug: "id", type: "number" },
+                    column: { name: "id", type: "SERIAL", primary: true, nullable: false, unique: true }
+                },
+                {
+                    def: { label: "Created At", slug: "created_at", type: "timestamp" },
+                    column: { name: "created_at", type: "TIMESTAMP", nullable: false, default: "CURRENT_TIMESTAMP" }
+                },
+                {
+                    def: { label: "Updated At", slug: "updated_at", type: "timestamp" },
+                    column: { name: "updated_at", type: "TIMESTAMP", nullable: false, default: "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" }
+                }
+            );
 
-            const queryRunner = AppDataSource.createQueryRunner();
+            const typeORMSchema = convertSchemaToTypeORM({ tableName, fields } as any);
+
+            const queryRunner: QueryRunner = AppDataSource.createQueryRunner();
             await queryRunner.connect();
 
             const columnDefinitions = typeORMSchema.columns
-                .map((col: any) => `${col.name} ${col.type}`)
+                .map((col: any) => {
+                    let definition = `${col.name} ${col.type}`;
+                    if (col.primary) definition += " PRIMARY KEY";
+                    if (!col.nullable) definition += " NOT NULL";
+                    if (col.unique) definition += " UNIQUE";
+                    if (col.default) definition += ` DEFAULT ${col.default}`;
+                    return definition;
+                })
                 .join(", ");
 
-            const createTableQuery = `CREATE TABLE ${typeORMSchema.tableName}
-                                      (
-                                          ${columnDefinitions}
-                                      )`;
+            const createTableQuery = `CREATE TABLE "${typeORMSchema.tableName}" (${columnDefinitions})`;
 
             await queryRunner.query(createTableQuery);
-
             await queryRunner.release();
 
             const schemaFilePath = path.join("./rnext/schemas", `${tableName}.json`);
 
             if (!fs.existsSync("./rnext/schemas")) {
-                fs.mkdirSync("./rnext/schemas", {recursive: true});
+                fs.mkdirSync("./rnext/schemas", { recursive: true });
             }
 
-            const schemaDefinition: Partial<rNextSchemaDef> = {tableName, fields};
+            const schemaDefinition: Partial<rNextSchemaDef> = { tableName, fields };
             fs.writeFileSync(schemaFilePath, JSON.stringify(schemaDefinition, null, 2));
 
-            res.status(201).json({message: `Schema '${tableName}' created successfully and saved to file`});
+            res.status(201).json({ message: `Schema '${tableName}' created successfully and saved to file` });
         } catch (error) {
             next(error);
         }

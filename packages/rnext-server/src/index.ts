@@ -7,6 +7,7 @@ import fs from 'fs';
 import {AppDataSource} from "./data-source.ts";
 import schemaRouter from "./apis/schemas/schema.route.ts";
 import SchemaController from "./apis/schemas/schema.controller.ts";
+import apiRoutes from "./apis/api.routes.ts";
 
 export interface RNextServerOptions {
     app?: NextServer;
@@ -95,7 +96,7 @@ export class RNextServer {
                 }
             );
 
-            this.server.use('/rnext-admin/api/admin', schemaRouter);
+            this.server.use('/rnext-admin/api', apiRoutes);
             this.server.get("/rnext-admin/*", (req, res) => {
                 const indexPath = path.join(this.cmsBuildDir, "index.html");
                 console.log(`Serving index.html for route ${req.path} from: ${indexPath}`);
