@@ -1,10 +1,12 @@
 import express from "express";
-import type { Express, Request, Response } from "express";
-import { NextServer } from "next/dist/server/next";
+import type {Express, Request, Response} from "express";
+import {NextServer} from "next/dist/server/next";
 import path from "path";
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 import fs from 'fs';
-import adminRouter from './admin/admin.route';
+import {AppDataSource} from "./data-source.ts";
+import schemaRouter from "./apis/schemas/schema.route.ts";
+import SchemaController from "./apis/schemas/schema.controller.ts";
 
 export interface RNextServerOptions {
     app?: NextServer;
@@ -24,6 +26,12 @@ export class RNextServer {
         this.server = express();
         this.initializeMiddleware();
 
+        AppDataSource.initialize()
+            .then(() => console.log("Database connected!"))
+            .catch((err) => console.error("Database connection error:", err));
+
+        new SchemaController()._syncSchema()
+
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
 
@@ -41,7 +49,7 @@ export class RNextServer {
 
     private initializeMiddleware = async () => {
         this.server.use(express.json());
-        this.server.use(express.urlencoded({ extended: true }));
+        this.server.use(express.urlencoded({extended: true}));
     }
 
     public listen = async (port: number, callback?: () => void): Promise<void> => {
@@ -49,7 +57,7 @@ export class RNextServer {
             if (this.app) {
                 await this.app.prepare();
             }
-            const handle = this.app ? this.app.getRequestHandler() : (req:Request, res:Response) => res.status(404).send('Not Found');
+            const handle = this.app ? this.app.getRequestHandler() : (req: Request, res: Response) => res.status(404).send('Not Found');
 
             this.server.get(["/rnext-admin", "/rnext-admin/"], (req, res) => {
                 const indexPath = path.join(this.cmsBuildDir, "index.html");
@@ -57,7 +65,7 @@ export class RNextServer {
                 res.sendFile(indexPath, (err) => {
                     if (err) {
                         console.error('Error serving index.html:', err);
-                        res.status(500).send('Error loading admin panel');
+                        res.status(500).send('Error loading schemas panel');
                     }
                 });
             });
@@ -87,14 +95,14 @@ export class RNextServer {
                 }
             );
 
-            this.server.use('/rnext-admin/api/admin', adminRouter);
+            this.server.use('/rnext-admin/api/admin', schemaRouter);
             this.server.get("/rnext-admin/*", (req, res) => {
                 const indexPath = path.join(this.cmsBuildDir, "index.html");
                 console.log(`Serving index.html for route ${req.path} from: ${indexPath}`);
                 res.sendFile(indexPath, (err) => {
                     if (err) {
                         console.error('Error serving index.html:', err);
-                        res.status(500).send('Error loading admin panel');
+                        res.status(500).send('Error loading schemas panel');
                     }
                 });
             });
