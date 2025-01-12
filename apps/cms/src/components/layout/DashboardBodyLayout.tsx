@@ -14,7 +14,7 @@ export default function DashboardBodyLayout({children, headerComponent}: {
             </div>
             {headerComponent}
         </header>
-        <main className={'overflow-y-auto xl:px-container px-default py-xl'}>
+        <main className={'overflow-y-auto md:p-default'}>
             {children}
         </main>
     </>

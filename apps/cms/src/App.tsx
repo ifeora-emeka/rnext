@@ -2,8 +2,21 @@ import './App.css'
 import DashboardBodyLayout from "@/components/layout/DashboardBodyLayout.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {SaveIcon, UploadIcon} from "lucide-react";
+import {usePageContext} from "@/context/page.context.tsx";
+import DashboardPage from "@/pages/dashboard/dashboard-page.tsx";
+import HomePage from "@/pages/home/home-page.tsx";
 
 function App() {
+    const { state: {activePage} } = usePageContext();
+
+    switch (activePage) {
+        case "dashboard":
+            return <DashboardPage />
+        case "home":
+            return <HomePage />
+        default:
+            return null
+    }
 
     return (
         <>
