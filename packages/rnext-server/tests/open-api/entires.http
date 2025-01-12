@@ -1,0 +1,18 @@
+### Create a new users entry
+POST http://localhost:3000/rnext-admin/api/entries/users
+Content-Type: application/json
+
+{
+  "data": {
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "username": "johndoe"
+  }
+}
+
+### Get one users entry
+GET http://localhost:3000/rnext-admin/api/entries/posts/1
+Content-Type: application/json
+
+

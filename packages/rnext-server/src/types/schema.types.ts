@@ -26,6 +26,7 @@ export enum rNextDataType {
     PHONE = 'phone',
     SLUG = 'slug',
     UID = 'uid',
+    TIMESTAMP = 'timestamp',
 }
 
 export type rNextSchemaField = {
@@ -42,5 +43,7 @@ export type rNextSchemaField = {
         unique?: boolean;
         primary?: boolean;
         default?: any;
+        autoincrement?: boolean;
+        onUpdate?: string;
     }
 }

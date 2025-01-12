@@ -5,9 +5,13 @@ const entryRouter = express.Router();
 const entryController = new EntryController();
 
 entryRouter.post(
-    '',
+    '/:tableName',
     entryController.create
-)
+);
+entryRouter.get(
+    '/:tableName/:entryID',
+    entryController.findOne
+);
 
 export default entryRouter;
 

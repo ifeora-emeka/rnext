@@ -5,9 +5,9 @@ import path from "path";
 import {fileURLToPath} from 'url';
 import fs from 'fs';
 import {AppDataSource} from "./data-source.ts";
-import schemaRouter from "./apis/schemas/schema.route.ts";
-import SchemaController from "./apis/schemas/schema.controller.ts";
 import apiRoutes from "./apis/api.routes.ts";
+import "reflect-metadata";
+
 
 export interface RNextServerOptions {
     app?: NextServer;
@@ -31,7 +31,7 @@ export class RNextServer {
             .then(() => console.log("Database connected!"))
             .catch((err) => console.error("Database connection error:", err));
 
-        new SchemaController()._syncSchema()
+        // new SchemaController()._syncSchema()
 
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);

@@ -1,13 +1,15 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import path from "path";
 
 export const AppDataSource = new DataSource({
     type: "sqlite",
-    database: "database.sqlite",
-    synchronize: true,
+    database: path.join(__dirname, "..", "rnext", "database.sqlite"), // Use path.join for cross-platform compatibility
+    synchronize: false, //todo: change this to false
     logging: true,
-    entities: ["src/entities/**/*.ts"],  // Adjust path to match your entities
+    entities: [path.join(__dirname, "..", "rnext", "entities", "**", "*.ts")], // Adjust entities path
 });
+console.log("\nDATA SOURCE PATH:::",path.join(__dirname, "..", "rnext", "entities", "**", "*.ts"));
 
 // Initialize the DataSource
 AppDataSource.initialize()
