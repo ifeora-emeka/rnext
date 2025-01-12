@@ -17,8 +17,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "rm -rf dist && bun build src/index.ts --outdir ./dist --target node && cd ../../apps/cms && npm run build && cp -r dist ../../packages/rnext-server/dist/cms-build",
-    "dev": "bun --watch src/index.ts",
+    "build": "bun run clean && bun build src/index.ts --outdir ./dist --target node && cd ../../apps/cms && npm run build && cp -r dist ../../packages/rnext-server/dist/cms-build",
+    "dev": "bun run clean && bun --watch src/index.ts",
+    "dev:debug": "bun --inspect --watch src/index.ts",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build && npm version patch",
     "typecheck": "tsc --noEmit"
@@ -33,7 +34,6 @@
     "concurrently": "^9.1.2",
     "express": "^4.21.2",
     "next": "^15.1.4",
-    "nodemon": "^3.1.9",
     "typescript": "^5.0.0",
     "wait-on": "^8.0.2"
   },

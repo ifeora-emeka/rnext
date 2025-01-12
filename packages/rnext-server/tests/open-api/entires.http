@@ -1,18 +1,25 @@
-### Create a new users entry
-POST http://localhost:3000/rnext-admin/api/entries/users
+### Create a new entry
+POST http://localhost:3000/rnext-admin/api/entries/posts
 Content-Type: application/json
 
 {
-  "data": {
-    "first_name": "John",
-    "last_name": "Doe",
-    "email": "john.doe@example.com",
-    "username": "johndoe"
+  "payload": {
+    "title": "My new post",
+    "content": "this is my post content",
+    "author": "John M. Doe"
   }
 }
 
-### Get one users entry
+### Get one entry
 GET http://localhost:3000/rnext-admin/api/entries/posts/1
 Content-Type: application/json
 
+### Update one entry
+PUT http://localhost:3000/rnext-admin/api/entries/posts/1
+Content-Type: application/json
 
+{
+    "payload": {
+        "first_name": "UPDATED FIRST nAME"
+    }
+}

@@ -1,0 +1,89 @@
+### Get all Schema
+GET http://localhost:3000/rnext-admin/api/schemas
+Content-Type: application/json
+
+### Create Schema
+POST http://localhost:3000/rnext-admin/api/schemas
+Content-Type: application/json
+
+{
+  "label": "Posts",
+  "tableName": "posts",
+  "fields": [
+    {
+      "def": {
+        "label": "Title",
+        "slug": "title",
+        "type": "text"
+      },
+      "column": {
+        "name": "title",
+        "type": "varchar",
+        "nullable": false
+      }
+    },
+    {
+      "def": {
+        "label": "Content",
+        "slug": "content",
+        "type": "rich-text"
+      },
+      "column": {
+        "name": "content",
+        "type": "text",
+        "nullable": false
+      }
+    },
+    {
+      "def": {
+        "label": "Author",
+        "slug": "author",
+        "type": "text"
+      },
+      "column": {
+        "name": "author",
+        "type": "varchar",
+        "nullable": false
+      }
+    },
+    {
+      "def": {
+        "label": "Number of Likes",
+        "slug": "number_of_likes",
+        "type": "number"
+      },
+      "column": {
+        "name": "number_of_likes",
+        "type": "integer",
+        "nullable": true,
+        "default": 0
+      }
+    },
+    {
+      "def": {
+        "label": "Number of Comments",
+        "slug": "number_of_comments",
+        "type": "number"
+      },
+      "column": {
+        "name": "number_of_comments",
+        "type": "integer",
+        "nullable": true,
+        "default": 0
+      }
+    },
+    {
+      "def": {
+        "label": "Number of Views",
+        "slug": "number_of_views",
+        "type": "number"
+      },
+      "column": {
+        "name": "number_of_views",
+        "type": "integer",
+        "nullable": true,
+        "default": 0
+      }
+    }
+  ]
+}

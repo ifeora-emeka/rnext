@@ -11,8 +11,7 @@ schemaRouter.post('', validateRequest(rNextSchemaValidation, 'body'), schemaCont
 //@ts-ignore
 schemaRouter.get('', schemaController.getAllSchemas);
 //@ts-ignore
-schemaRouter.put('', schemaController.updateSchema);
-//@ts-ignore
-schemaRouter.put('/sync', schemaController.syncSchema);
+schemaRouter.put('', validateRequest(rNextSchemaValidation, 'body'), schemaController.updateSchema);
+
 
 export default schemaRouter;
