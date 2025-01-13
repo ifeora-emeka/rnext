@@ -2,12 +2,12 @@ import express from "express";
 import type {Express, Request, Response} from "express";
 import {NextServer} from "next/dist/server/next";
 import path from "path";
+import cors from "cors";
 import {fileURLToPath} from 'url';
 import fs from 'fs';
 import {AppDataSource} from "./data-source.ts";
 import apiRoutes from "./apis/api.routes.ts";
 import "reflect-metadata";
-
 
 export interface RNextServerOptions {
     app?: NextServer;
@@ -31,8 +31,6 @@ export class RNextServer {
             .then(() => console.log("Database connected!"))
             .catch((err) => console.error("Database connection error:", err));
 
-        // new SchemaController()._syncSchema()
-
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
 
@@ -49,6 +47,7 @@ export class RNextServer {
     }
 
     private initializeMiddleware = async () => {
+        this.server.use(cors());
         this.server.use(express.json());
         this.server.use(express.urlencoded({extended: true}));
     }
@@ -140,4 +139,4 @@ export class RNextServer {
 }
 
 const server = new RNextServer({});
-server.listen(3000);
+server.listen(1339);

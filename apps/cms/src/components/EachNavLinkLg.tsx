@@ -12,7 +12,7 @@ export default function EachNavLinkLg({isActive, onClick, Icon, label}:Props){
         <button
             aria-label={label}
             onClick={onClick}
-            className={cn(`w-full p-default border-b flex items-center truncate gap-sm`, {
+            className={cn(`w-full p-default border-b border-background flex items-center truncate gap-sm`, {
                 "bg-accent text-accent-foreground": isActive,
                 "hover:bg-accent/50": !isActive,
             })}

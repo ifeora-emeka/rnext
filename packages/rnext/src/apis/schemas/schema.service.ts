@@ -66,10 +66,19 @@ export const ${formatEntityClassName(tableName)}Metadata = {
     public async createSchema(schemaDef: rNextSchemaDef): Promise<void> {
         const { tableName, fields, label } = schemaDef;
         const schemaFilePath = path.resolve("rnext", "schemas", `${tableName}.json`);
+        const entityFilePath = path.resolve("rnext", "entities", `${tableName}.ts`);
+
+        if (fs.existsSync(schemaFilePath)) {
+            throw new Error(`Schema file '${tableName}.json' already exists`);
+        }
+
+        if (fs.existsSync(entityFilePath)) {
+            throw new Error(`Entity file '${tableName}.ts' already exists`);
+        }
+
         const schemaDefinition: Partial<rNextSchemaDef> = { label, tableName, fields };
         this.createSchemaFile(schemaFilePath, schemaDefinition);
 
-        const entityFilePath = path.resolve("rnext", "entities", `${tableName}.ts`);
         const entityContent = this.generateEntityContent(tableName, label, fields);
         this.createEntityFile(entityFilePath, entityContent);
     }

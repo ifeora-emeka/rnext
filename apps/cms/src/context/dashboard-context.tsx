@@ -1,8 +1,14 @@
-import { useState, useCallback, createContext, useContext } from "react";
+import {useState, useCallback, createContext, useContext, useEffect} from "react";
 import * as React from "react";
+import {useQuery} from "@tanstack/react-query";
+import {APICall} from "@/lib/api.ts";
+import {cacheTTL} from "@/config/api.config.ts";
+import { rNextSchemaDef } from '@idegin/rnext/types';
 
 type DashboardContextState = {
     activePage: "content" | "schema" | "media" | "settings";
+    isLoading?: boolean;
+    schemas: rNextSchemaDef[];
 };
 
 type PartialState = Partial<DashboardContextState>;
@@ -10,6 +16,7 @@ type PartialState = Partial<DashboardContextState>;
 const DashboardContext = createContext<{
     state: DashboardContextState;
     updateDashboardContextState: (partialState: PartialState) => void;
+    refetch: () => void;
 } | null>(null);
 
 const useDashboardContext = () => {
@@ -20,18 +27,37 @@ const useDashboardContext = () => {
     return context;
 };
 
-export const DashboardContextProvider = ({ children }: { children: React.ReactNode }) => {
-    const [state, setState] = useState<DashboardContextState>({ activePage: "content" });
+export const DashboardContextProvider = ({children}: { children: React.ReactNode }) => {
+    const [state, setState] = useState<DashboardContextState>({
+        activePage: "content",
+        isLoading: true,
+        schemas: []
+    });
+
+    const {isFetching, data, refetch} = useQuery({
+        queryKey: ['dashboard'],
+        staleTime: cacheTTL.long,
+        queryFn: () => APICall(''),
+    });
 
     const updateDashboardContextState = useCallback((partialState: PartialState) => {
-        setState((prevState) => ({ ...prevState, ...partialState }));
+        setState((prevState) => ({...prevState, ...partialState}));
     }, []);
 
+    useEffect(() => {
+        if (data) {
+            updateDashboardContextState({
+                schemas: data.data.schemas
+            });
+        }
+        updateDashboardContextState({isLoading: isFetching});
+    }, [data, isFetching])
+
     return (
-        <DashboardContext.Provider value={{ state, updateDashboardContextState }}>
+        <DashboardContext.Provider value={{state, updateDashboardContextState, refetch}}>
             {children}
         </DashboardContext.Provider>
     );
 };
 
-export { useDashboardContext };
+export {useDashboardContext};

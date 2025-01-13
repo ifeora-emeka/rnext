@@ -8,14 +8,19 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Loader2 } from 'lucide-react'
+import { useMutation } from "@tanstack/react-query"
+import { APICall } from "@/lib/api"
+import {useDashboardContext} from "@/context/dashboard-context.tsx";
 
 type FormData = {
     name: string
 }
 
-export default function CreateCollectionModal({children}:{children: React.ReactNode}) {
-    const [open, setOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+export default function CreateCollectionModal({children}:{
+    children: React.ReactNode,
+}) {
+    const [open, setOpen] = useState(false);
+    const {refetch} = useDashboardContext();
 
     const form = useForm<FormData>({
         defaultValues: {
@@ -23,15 +28,32 @@ export default function CreateCollectionModal({children}:{children: React.ReactN
         },
     })
 
+    const { mutate, isPending } = useMutation({
+        mutationFn: (data: { label: string, tableName: string, fields: unknown[] }) =>
+            APICall('/schemas', {
+                method: 'POST',
+                data
+            }),
+        onSuccess: (data) => {
+            refetch()
+            console.log('DONE::', data)
+            toast.success("Collection created successfully!")
+            setOpen(false)
+            form.reset()
+        },
+        onError: (error) => {
+            console.log('ERROR::', error)
+            toast.error("Failed to create collection")
+        }
+    })
+
     const onSubmit = async (data: FormData) => {
-        setIsLoading(true)
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        console.log(data)
-        setIsLoading(false)
-        toast.success("Collection created successfully!")
-        setOpen(false)
-        form.reset()
+        const tableName = data.name.toLowerCase().replace(/[^a-z\s]/g, '').trim().replace(/\s+/g, '_')
+        mutate({
+            label: data.name,
+            tableName: tableName,
+            fields: []
+        })
     }
 
     return (
@@ -69,8 +91,8 @@ export default function CreateCollectionModal({children}:{children: React.ReactN
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" className="w-full" disabled={isLoading}>
-                                {isLoading ? (
+                            <Button type="submit" className="w-full" disabled={isPending}>
+                                {isPending ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                         Creating...

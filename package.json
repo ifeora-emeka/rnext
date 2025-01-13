@@ -1,11 +1,12 @@
 {
-  "name": "rnext",
+  "name": "rnext-repo",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
@@ -21,6 +22,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@changesets/cli": "^2.27.11",
     "reflect-metadata": "^0.2.2",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.20"

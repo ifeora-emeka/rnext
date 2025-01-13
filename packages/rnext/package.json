@@ -1,14 +1,20 @@
 {
-  "name": "rnext-server",
-  "version": "0.0.45",
+  "name": "@idegin/rnext",
+  "version": "0.0.4",
+  "private": false,
   "description": "A server for running Next.js and Vite applications together",
   "type": "module",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./types": {
+      "types": "./src/types/schema.types.ts",
+      "default": "./src/types/schema.types.ts"
     }
   },
   "files": [
@@ -17,7 +23,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "bun run clean && bun build src/index.ts --outdir ./dist --target node && cd ../../apps/cms && npm run build && cp -r dist ../../packages/rnext-server/dist/cms-build",
+    "build": "bun run clean && tsup src/index.ts --format cjs,esm --dts --out-dir dist && cd ../../apps/cms && npm run build && cp -r dist ../../packages/rnext/dist/cms-build",
     "dev": "bun run clean && bun --watch src/index.ts",
     "dev:debug": "bun --inspect --watch src/index.ts",
     "clean": "rm -rf dist",
@@ -29,12 +35,14 @@
     "next": "^13.0.0 || ^14.0.0 || ^15.0.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^20.0.0",
     "concurrently": "^9.1.2",
     "express": "^4.21.2",
     "next": "^15.1.4",
-    "typescript": "^5.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
     "wait-on": "^8.0.2"
   },
   "engines": {
@@ -50,13 +58,14 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/idegin-tech/rnext/rnext-server.git"
+    "url": "git+https://github.com/idegin-tech/rnext.git"
   },
   "bugs": {
-    "url": "https://github.com/idegin-tech/rnext/rnext-server/issues"
+    "url": "https://github.com/idegin-tech/rnext/issues"
   },
-  "homepage": "https://github.com/idegin-tech/renext/rnext-server#readme",
+  "homepage": "https://github.com/idegin-tech/renext#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "zod": "^3.24.1"
   }
 }

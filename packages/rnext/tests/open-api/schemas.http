@@ -1,9 +1,9 @@
 ### Get all Schema
-GET http://localhost:3000/rnext-admin/api/schemas
+GET http://localhost:1339/rnext-admin/api/schemas
 Content-Type: application/json
 
 ### Create Schema
-POST http://localhost:3000/rnext-admin/api/schemas
+POST http://localhost:1339/rnext-admin/api/schemas
 Content-Type: application/json
 
 {

@@ -1,5 +1,5 @@
 ### Create a new entry
-POST http://localhost:3000/rnext-admin/api/entries/posts
+POST http://localhost:1339/rnext-admin/api/entries/posts
 Content-Type: application/json
 
 {
@@ -11,11 +11,11 @@ Content-Type: application/json
 }
 
 ### Get one entry
-GET http://localhost:3000/rnext-admin/api/entries/posts/1
+GET http://localhost:1339/rnext-admin/api/entries/posts/1
 Content-Type: application/json
 
 ### Update one entry
-PUT http://localhost:3000/rnext-admin/api/entries/posts/1
+PUT http://localhost:1339/rnext-admin/api/entries/posts/1
 Content-Type: application/json
 
 {
