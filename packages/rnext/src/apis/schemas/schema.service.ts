@@ -1,12 +1,12 @@
 import fs from "fs";
 import path from "path";
 import { formatEntityClassName } from "../../utils/formaters.ts";
-import type { rNextSchemaDef } from "../../types/schema.types.ts";
+import type { rNextSchemaDef, rNextSchemaField } from "../../types/schema.types.ts";
 import {formatDefaultValue, mapTypeToTS} from "./schema.utils.ts";
 
 export class SchemaService {
 
-    public generateEntityContent(tableName: string, label: string, fields: any[]): string {
+    public generateEntityContent(tableName: string, label: string, fields: rNextSchemaField[]): string {
         return `
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
@@ -16,7 +16,7 @@ export class ${formatEntityClassName(tableName)} {
     id: number;
 
     ${fields
-            .filter((field) => !["id", "created_at", "updated_at"].includes(field.column.name))
+            .filter((field) => !["id", "created_at", "updated_at"].includes(field.column.key))
             .map((field) => {
                 console.log('THE DEFAULT VALUE IS: ', field.column.default);
                 const defaultValue = field.column.default !== undefined
@@ -29,7 +29,7 @@ export class ${formatEntityClassName(tableName)} {
         ${field.column.nullable ? "nullable: true" : "nullable: false"},
         ${defaultValue ? `default: ${defaultValue}` : ""}
     })
-    ${field.column.name}: ${mapTypeToTS(field.column.type)};
+    ${field.column.key}: ${mapTypeToTS(field.column.type)};
 `;
             })
             .join("")}

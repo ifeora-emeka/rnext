@@ -15,7 +15,7 @@ export const rNextSchemaValidation = z.object({
                 name: z.string(),
                 type: z.string(),
                 length: z.number().optional(),
-                nullable: z.boolean().optional(),
+                nullable: z.boolean(),
                 unique: z.boolean().optional(),
                 primary: z.boolean().optional(),
                 default: z.any().optional(),

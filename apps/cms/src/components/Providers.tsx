@@ -9,6 +9,7 @@ import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query'
+import {SchemaContextProvider} from "@/context/schema.context.tsx";
 
 const queryClient = new QueryClient()
 
@@ -19,7 +20,9 @@ function Providers({children}: { children: React.ReactNode }) {
                 <QueryClientProvider client={queryClient}>
                     <PageContextProvider>
                         <DashboardContextProvider>
-                            {children}
+                            <SchemaContextProvider>
+                                {children}
+                            </SchemaContextProvider>
                         </DashboardContextProvider>
                     </PageContextProvider>
                 </QueryClientProvider>

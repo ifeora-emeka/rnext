@@ -21,7 +21,7 @@ export default function DashboardLeftNav() {
 
     return <>
         <aside
-            className={'border-r border-background bg-card w-[18rem] min-h-screen max-h-screen select-none'}
+            className={'border-r border-background bg-card w-[18rem] min-h-screen max-h-screen select-none z-0'}
         >
             <div className={'border-b border-background min-h-header max-h-header'}>
             </div>

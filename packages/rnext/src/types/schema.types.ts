@@ -1,13 +1,15 @@
 export type rNextSchemaDef = {
     label: string;
     tableName: string;
+    description: string | null;
     fields: rNextSchemaField[];
 }
 
 export enum rNextDataType {
     RICH_TEXT = 'rich-text',
-    TEXT = 'text',
-    INTEGER = 'integer',
+    SHORT_TEXT = 'short-text',
+    LONG_TEXT = 'long-text',
+
     BOOLEAN = 'boolean',
     DATE = 'date',
     MULTI_SELECT = 'multi-select',
@@ -19,7 +21,13 @@ export enum rNextDataType {
     PASSWORD = 'password',
     JSON = 'json',
     GEO_POINT = 'geo-point',
-    MEDIA = 'media',
+
+    DOCUMENT = 'document',
+    IMAGE = 'image',
+    VIDEO = 'video',
+    AUDIO = 'audio',
+    FILE = 'file',
+
     NUMBER = 'number',
     PERCENTAGE = 'percentage',
     CURRENCY = 'currency',
@@ -36,7 +44,7 @@ export type rNextSchemaField = {
         type: rNextDataType
     },
     column: {
-        name: string;
+        key: string;
         type: string;
         length?: number;
         nullable?: boolean;

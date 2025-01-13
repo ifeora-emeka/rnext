@@ -1,34 +1,34 @@
-import {useState, useCallback, createContext, useContext} from "react";
+import { useState, useCallback, createContext, useContext } from "react";
 import * as React from "react";
 import { rNextSchemaDef } from '@idegin/rnext/types';
 
 type SchemaContextState = {
     activeSchema: rNextSchemaDef | null;
+    isLoading: boolean;
 };
 
 type PartialState = Partial<SchemaContextState>;
 
-const PageContext = createContext<{
+const SchemaContext = createContext<{
     state: SchemaContextState;
-    updatePageContextState: (partialState: PartialState) => void
+    updateSchemaContextState: (partialState: PartialState) => void;
 } | null>(null);
 
-const usePageContext = () => {
-    const context = useContext(PageContext);
+const useSchemaContext = () => {
+    const context = useContext(SchemaContext);
     if (!context) {
-        throw new Error("usePageContext must be used within a PageContextProvider");
+        throw new Error("useSchemaContext must be used within a SchemaContextProvider");
     }
     return context;
 };
 
-export const PageContextProvider = ({children}: {
-    children: React.ReactNode
-}) => {
+export const SchemaContextProvider = ({ children }: { children: React.ReactNode }) => {
     const [state, setState] = useState<SchemaContextState>({
-        activeSchema: null
+        activeSchema: null,
+        isLoading: false,
     });
 
-    const updatePageContextState = useCallback((partialState: PartialState) => {
+    const updateSchemaContextState = useCallback((partialState: PartialState) => {
         setState((prevState) => ({
             ...prevState,
             ...partialState
@@ -36,10 +36,10 @@ export const PageContextProvider = ({children}: {
     }, []);
 
     return (
-        <PageContext.Provider value={{state, updatePageContextState}}>
+        <SchemaContext.Provider value={{ state, updateSchemaContextState }}>
             {children}
-        </PageContext.Provider>
+        </SchemaContext.Provider>
     );
 };
 
-export {usePageContext};
+export { useSchemaContext };

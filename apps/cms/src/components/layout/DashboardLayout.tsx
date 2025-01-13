@@ -44,7 +44,7 @@ export default function DashboardLayout({children}: { children: React.ReactNode 
     ]
 
     return <>
-        <div className={'min-h-screen max-h-screen bg-background flex'}>
+        <div className={'min-h-screen max-h-screen bg-background flex relative'}>
             <div
                 className={'bg-card min-h-screen max-h-screen border-r border-background w-16 max-w-16 flex flex-col justify-between select-none'}
             >
@@ -91,7 +91,7 @@ export default function DashboardLayout({children}: { children: React.ReactNode 
                 </div>
             </div>
             <DashboardLeftNav />
-            <div className={'flex-1 flex flex-col'}>
+            <div className={'flex-1 flex flex-col z-10'}>
                 {children}
             </div>
         </div>
